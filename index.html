@@ -575,7 +575,7 @@ ${V.ai?V.ai.map((r,i)=>`<div class="row"><span><b>${esc(r.name)}</b><span class=
 <label>Budget</label><div>${[['Broke',4],['Med',8],['Med high',15],['Baller',35]].map(([l,v])=>`<span class="chip ap" onclick="document.getElementById('ap').value=${v};document.querySelectorAll('.chip.ap').forEach(x=>x.classList.remove('on'));this.classList.add('on')">${l}</span>`).join('')}</div><input type="number" id="ap" min="0" inputmode="decimal" placeholder="or type an amount (BND per person)" style="margin-top:6px" oninput="document.querySelectorAll('.chip.ap').forEach(x=>x.classList.remove('on'))">
 <label>Location</label><div id="ad">${LOCS.map(d=>`<span class="chip" data-k="${d}" onclick="document.querySelectorAll('#ad .chip').forEach(x=>x!==this&&x.classList.remove('on'));this.classList.toggle('on')">${LBL(d)}</span>`).join('')}</div>
 <label>Cuisine (pick one or more)</label><div id="ac">${CU.map(c=>`<span class="chip" data-k="${c}" onclick="this.classList.toggle('on')">${c}</span>`).join('')}</div>
-<label>Already Been?</label><div><span class="chip" id="abeen" onclick="this.classList.toggle('on')">Already Been</span></div>
+<label>Already Been?</label><div id="abn">${[['1','Already Been'],['0','Never Been']].map(([k,l])=>`<span class="chip" data-k="${k}" onclick="document.querySelectorAll('#abn .chip').forEach(x=>x!==this&&x.classList.remove('on'));this.classList.toggle('on')">${l}</span>`).join('')}</div>
 <label>Labels (optional)</label><div id="al">${LABELS.map(([k,l])=>`<span class="chip" data-k="${k}" onclick="this.classList.toggle('on')">${l}</span>`).join('')}</div>
 <label>Note (optional)</label><input type="text" id="anote" placeholder="What to order, opening hours…">
 <button class="btn" onclick="addR()">Add to our list</button></div>
@@ -590,14 +590,14 @@ const EDITOR='Amirah',ed=()=>ME===EDITOR;
 const BUD={'4':'Broke (under $4)','8':'Med (under $10)','15':'Med high ($10+)','35':'Baller'};
 function regRow(r){const me=ME?S.rate.find(x=>x.s==r.id&&x.p==ME):null,a=avgR(r.id),hg=(isH(r)?1:0)+(isG(r)?2:0),L=locList(r),t=tierOf(r),cu=cuz(r).length==1?cuz(r)[0]:'';
 const pb=r.been==null?'':r.been?'1':'0',myb=ed()?pb:(me&&me.b!=null?(me.b?'1':'0'):''),mv=me&&+me.v>0?String(me.v):'';
-const been=`<select aria-label="Already been" ${ME?'':'disabled'} onchange="${ed()?`editSpot('${r.id}',{been:this.value===''?null:this.value=='1'})`:`setMyBeen('${r.id}',this.value)`}">${opt('',ME?'Already / Never Been?':'Pick “Rating as” first',myb)}${opt('1','Already Been?',myb)}${opt('0','Never Been?',myb)}</select>`;
+const been=`<select aria-label="Already been" ${ME?'':'disabled'} onchange="${ed()?`editSpot('${r.id}',{been:this.value===''?null:this.value=='1'})`:`setMyBeen('${r.id}',this.value)`}">${opt('',ME?'Already Been / Never Been?':'Pick “Rating as” first',myb)}${opt('1','Already Been',myb)}${opt('0','Never Been',myb)}</select>`;
 const rate=myb=='1'?`<select aria-label="Rating out of 10" onchange="setRate('${r.id}',this.value)">${opt('','Rating?',mv)}${[1,2,3,4,5,6,7,8,9,10].map(n=>opt(String(n),'Rating '+n+' /10',mv)).join('')}</select>`:'';
 const info=[t&&BUD[t],L.length&&L.map(LBL).join(' · '),cuz(r).join(' / '),r.been!=null&&(r.been?'Already Been':'Never Been'),isH(r)&&'Our Hearts',isG(r)&&'Hidden Gem'].filter(Boolean).map(x=>`<span class="tag">${esc(x)}</span>`).join('');
 const locBox=`<details class="ms" ${V.locOpen===r.id?'open':''} ontoggle="V.locOpen=this.open?'${r.id}':(V.locOpen==='${r.id}'?null:V.locOpen)"><summary>${L.length?esc(L.map(LBL).join(', ')):'Location?'}</summary><div>${LOCS.map(d=>`<span class="chip ${L.includes(d)?'on':''}" onclick="togLoc('${r.id}','${d}')">${LBL(d)}</span>`).join('')}</div></details>`;
 return `<div class="row reg"><span class="sn" onclick="openSpot('${r.id}')">${esc(r.n)}${a!==null?`<br><small>crew ${a.toFixed(1)}/10</small>`:''}</span>
 ${ed()&&(!r.ok||V.edit===r.id)?`<div class="dd"><select aria-label="Budget" onchange="editSpot('${r.id}',{p:+this.value})">${opt('','Budget?',t)}${Object.entries(BUD).map(([v,l])=>opt(v,l,t)).join('')}</select>
 <select aria-label="Cuisine" onchange="editSpot('${r.id}',{c:this.value,cs:null})">${opt('','Cuisine?',cu)}${[...CU,...AFT].sort((x,y)=>x.localeCompare(y)).map(c=>opt(c,c,cu)).join('')}</select>
-${locBox}${been}${rate}${pb=='1'?`<select aria-label="Our Hearts or Hidden Gems" onchange="setHG('${r.id}',+this.value)">${opt('0','Our Hearts / Hidden Gems?',String(hg))}${opt('1','Our Hearts',String(hg))}${opt('2','Hidden Gem',String(hg))}${opt('3','Our Hearts + Hidden Gem',String(hg))}</select>`:''}<button class="btn s pk sv" onclick="saveSpot('${r.id}')">Save</button></div>`
+${locBox}${been}${rate}${pb=='1'?`<select aria-label="Our Hearts or Hidden Gems" onchange="setHG('${r.id}',this.value)">${opt('0','Our Hearts / Hidden Gems?',hg?String(hg):r.na?'na':'0')}${opt('na','N/A',hg?String(hg):r.na?'na':'0')}${opt('1','Our Hearts',String(hg))}${opt('2','Hidden Gem',String(hg))}${opt('3','Our Hearts + Hidden Gem',String(hg))}</select>`:''}<button class="btn s pk sv" onclick="saveSpot('${r.id}')">Save</button></div>`
 :`<div class="ri">${info}</div><div class="dd one">${ed()?'':been}${rate}${ed()?`<button class="btn s ev" onclick="V.edit='${r.id}';render()">Edit</button>`:''}</div>`}</div>`}
 function togLoc(id,d){const r=byId(id),L=locList(r).filter(x=>x!==d);if(L.length==locList(r).length)L.push(d);L.sort((a,b)=>LOCS.indexOf(a)-LOCS.indexOf(b));V.locOpen=id;editSpot(id,{ds:L,d:L[0]||''})}
 function saveSpot(id){const r=byId(id),miss=[!tierOf(r)&&'Budget',!locList(r).length&&'Location',!cuz(r)[0]&&'Cuisine',r.been==null&&'Already Been'].filter(Boolean);
@@ -605,7 +605,7 @@ if(miss.length){toast('Fill in '+miss.join(', ')+' before saving.');return}V.edi
 async function setMyBeen(id,v){if(!ME){toast('Pick who you are under Rating as first.');return}const rid=id+'__'+ME.replace(/\s+/g,'_');if(v===''){await delItem('rate',rid);return}
 const cur=S.rate.find(x=>x.id==rid);await addItem('rate',{id:rid,s:id,p:ME,b:v=='1',v:v=='1'&&cur&&+cur.v>0?+cur.v:0})}
 async function setRate(id,v){if(!ME){toast('Pick who you are under Rating as first.');return}const rid=id+'__'+ME.replace(/\s+/g,'_');await addItem('rate',{id:rid,s:id,p:ME,b:true,v:+v||0});if(+v>=9)burst()}
-function setHG(id,v){const r=byId(id);if(!!(v&1)!=isH(r))setHeart(id,!!(v&1));if(!!(v&2)!=isG(r))setGem(id,!!(v&2))}
+function setHG(id,v){const r=byId(id);if(v==='na'){editSpot(id,{na:true});v=0}else{v=+v;if(r.na)editSpot(id,{na:false})}if(!!(v&1)!=isH(r))setHeart(id,!!(v&1));if(!!(v&2)!=isG(r))setGem(id,!!(v&2))}
 const SORTS=[['az','A-Z'],['za','Z-A'],['cheap','cheapest first'],['dear','most expensive first'],['visits','most visited first'],['fresh','never been first'],['rated','top rated first']];
 function sortL(l,k){const cnt={};S.logs.forEach(x=>cnt[x.r]=(cnt[x.r]||0)+1);const nm=(a,b)=>a.n.localeCompare(b.n),pc=r=>r.p||null;
 const f={az:nm,za:(a,b)=>-nm(a,b),cheap:(a,b)=>(pc(a)===null)-(pc(b)===null)||(pc(a)||0)-(pc(b)||0)||nm(a,b),dear:(a,b)=>(pc(a)===null)-(pc(b)===null)||(pc(b)||0)-(pc(a)||0)||nm(a,b),
@@ -628,7 +628,7 @@ function goAdd(){go('disc');setTimeout(()=>{const f=$('addform');if(f){f.scrollI
 function addR(){const n=$('an').value.trim();if(!n){toast('Give the place a name first.');$('an').focus();return}
 const dup=all().find(r=>r.n.trim().toLowerCase()==n.toLowerCase());if(dup&&!confirm(dup.n+' is already on the list. Add it again anyway?'))return;
 const L=[...document.querySelectorAll('#al .chip.on')].map(x=>x.dataset.k),cs=[...document.querySelectorAll('#ac .chip.on')].map(x=>x.dataset.k),aft=document.querySelector('.chip.at.on')?.dataset.k=='aft',dd=document.querySelector('#ad .chip.on')?.dataset.k||'',vs=L.filter(k=>k.startsWith('v:')).map(k=>k.slice(2)),id=uid('c');
-const o={id,n,c:cs.join(' / ')||(aft?'Dessert':'Mixed'),a:dd,p:+$('ap').value||0,g:L.includes('g'),nw:L.includes('nw')};if(cs.length>1)o.cs=cs;if(dd)o.d=dd;if($('abeen').classList.contains('on'))o.been=true;if(vs.length)o.v=vs;const note=$('anote').value.trim();if(note)o.note=note;
+const o={id,n,c:cs.join(' / ')||(aft?'Dessert':'Mixed'),a:dd,p:+$('ap').value||0,g:L.includes('g'),nw:L.includes('nw')};if(cs.length>1)o.cs=cs;if(dd)o.d=dd;const bk=document.querySelector('#abn .chip.on');if(bk)o.been=bk.dataset.k=='1';if(vs.length)o.v=vs;const note=$('anote').value.trim();if(note)o.note=note;
 document.activeElement&&document.activeElement.blur();addItem('cust',o);if(L.includes('heart'))setHeart(id,true);confetti();toast(n+' added to the list');setTimeout(()=>openSpot(id),300)}
 /* ---- spot sheet: heart, gem, rating ---- */
 function setMe(p){ME=p;try{localStorage.setItem('fh_me',p)}catch(e){}if(V.sheet)openSpot(V.sheet)}
