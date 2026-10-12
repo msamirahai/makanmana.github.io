@@ -109,7 +109,7 @@ small{color:var(--mut)}
 background-image:linear-gradient(90deg,transparent 49.6%,rgba(74,58,120,.08) 50%,transparent 50.4%),linear-gradient(transparent 49.4%,rgba(74,58,120,.07) 50%,transparent 50.6%);transform-origin:50% 50%;animation:unfold .65s cubic-bezier(.2,.8,.3,1.1)}
 .ifn{margin:-2px 0 8px;font-weight:600}
 #wb:disabled{background:color-mix(in srgb,var(--mut) 22%,var(--card));color:var(--mut);box-shadow:none;opacity:1;cursor:not-allowed}#wb:disabled::after{display:none}
-.row.reg{flex-wrap:wrap;align-items:flex-start}.row.reg .sn{flex-basis:100%}.dd{display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%}.dd select{min-height:36px;padding:5px 9px;font-size:13px;border-radius:11px}.dd select[aria-label^=Our]{grid-column:1/-1}.dd .sv{grid-column:1/-1;justify-content:center}.dd.one:has(.ev){grid-template-columns:1fr auto}
+.row.reg{flex-wrap:wrap;align-items:flex-start}.row.reg .sn{flex-basis:100%}.dd{display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%}.dd select{min-height:36px;padding:5px 9px;font-size:13px;border-radius:11px}.dd select[aria-label^=Our]{grid-column:1/-1}.ms{grid-column:1/-1}.ms summary{list-style:none;cursor:pointer;min-height:36px;padding:7px 30px 7px 10px;font-size:13px;border:2px solid var(--line);border-radius:11px;background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 16'%3E%3Cpath d='M2 6l4-4 4 4M2 10l4 4 4-4' fill='none' stroke='%23a07a96' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 11px center/10px 14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ms summary::-webkit-details-marker{display:none}.ms>div{padding:6px 0 2px}.ms .chip{padding:5px 11px;font-size:13px}.dd .sv{grid-column:1/-1;justify-content:center}.dd.one:has(.ev){grid-template-columns:1fr auto}
 .hint.tight{margin:10px 0 0}.hint.tight+.hint.tight{margin-top:2px}
 .need{text-align:center;font-size:13px;line-height:1.55;font-weight:600;color:var(--pk);margin:8px 0 0}.need:empty{display:none}
 .chip.done{border-style:dashed}
@@ -260,7 +260,7 @@ const kbT=r=>/kuala belait|\bkb\b/i.test(r.a||'')?' kb kuala belait':'';
 const pr=r=>r.p?'~BND '+r.p:'price not set';
 const TL={fav:['Crew fave','p'],meh:['Meh','l'],late:['Late night',''],chill:['Chill spot',''],reuse:['Reusables discount',''],try:['To try','l'],miri:['Miri','']};
 const isH=r=>!!S.heart[r.id];
-const ratesOf=id=>S.rate.filter(x=>x.s==id);
+const ratesOf=id=>S.rate.filter(x=>x.s==id&&+x.v>0);
 const avgR=id=>{const r=ratesOf(id);return r.length?r.reduce((a,x)=>a+(+x.v||0),0)/r.length:null};
 const HEART='<svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.1 4.3 2.4h2c.7-1.3 2.2-2.4 4.3-2.4 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg>';
 const hb=r=>`<button class="hb ${isH(r)?'on':''}" onclick="event.stopPropagation();setHeart('${r.id}',${!isH(r)})" aria-label="${isH(r)?'Remove heart':'Heart this place'}" aria-pressed="${isH(r)}">${HEART}</button>`;
@@ -341,9 +341,11 @@ const DIST=['Brunei-Muara','Tutong','Belait','Temburong','Miri'];
 const SUBS=[['Batu Besurat',/batu besurat/],['Batu Satu',/batu satu/],['Beribi',/beribi/],['Kiarong',/kiarong/],['Kiulap',/kiulap/],['Madang',/madang/]];
 const LOCS=['Brunei-Muara',...SUBS.map(x=>x[0]+', Brunei-Muara'),'Tutong','Belait','Temburong','Miri'];
 const LBL=d=>d=='Brunei-Muara'?'Anywhere in Brunei-Muara':d.replace(', Brunei-Muara','');
-const locs=r=>{const a=(r.a||'').toLowerCase(),o=new Set(dist(r));if(r.d&&r.d.includes(', '))o.add(r.d);else if(!r.d)SUBS.forEach(([n,re])=>{if(re.test(a))o.add(n+', Brunei-Muara')});return[...o]};
+const dsOf=r=>r.ds&&r.ds.length?r.ds:r.d?[r.d]:[];
+const locList=r=>dsOf(r).length?dsOf(r):(locOf(r)?[locOf(r)]:[]);
+const locs=r=>{const a=(r.a||'').toLowerCase(),o=new Set(dist(r));if(r.ds&&r.ds.length)r.ds.forEach(x=>o.add(x));else if(r.d&&r.d.includes(', '))o.add(r.d);else if(!r.d)SUBS.forEach(([n,re])=>{if(re.test(a))o.add(n+', Brunei-Muara')});return[...o]};
 const locOf=r=>r.d||(SUBS.find(([n,re])=>re.test((r.a||'').toLowerCase()))||[])[0]&&(SUBS.find(([n,re])=>re.test((r.a||'').toLowerCase()))[0]+', Brunei-Muara')||(r.a?dist(r)[0]:'');
-function dist(r){if(r.d)return[r.d.includes(', ')?r.d.split(', ')[1]:r.d];const a=(r.a||'').toLowerCase();if(hasT(r,'miri')||/\bmiri\b/.test(a))return['Miri'];const d=[];
+function dist(r){const D=dsOf(r);if(D.length)return[...new Set(D.map(x=>x.includes(', ')?x.split(', ')[1]:x))];const a=(r.a||'').toLowerCase();if(hasT(r,'miri')||/\bmiri\b/.test(a))return['Miri'];const d=[];
 if(/belait|\bkb\b|seria|panaga|simpur|lumut|sungai liang/.test(a))d.push('Belait');if(/tutong|telisai|lamunin/.test(a))d.push('Tutong');if(/temburong|bangar/.test(a))d.push('Temburong');
 if(!d.length||/various|incl|gadong|kiulap|bandar|bsb|muara|empire|jerudong|kiarong|menglait|kota batu|kampung ayer|riverside|radisson|rgc/.test(a))d.push('Brunei-Muara');return d}
 const locOK=(r,q)=>V.loc.size?locs(r).some(d=>V.loc.has(d)):(q.includes('miri')||!dist(r).includes('Miri'));
@@ -586,17 +588,23 @@ const tierOf=r=>!r.p?'':r.p<=4?'4':r.p<=10?'8':r.p<30?'15':'35';
 const opt=(v,l,cur)=>`<option value="${v}" ${v===cur?'selected':''}>${l}</option>`;
 const EDITOR='Amirah',ed=()=>ME===EDITOR;
 const BUD={'4':'Broke (under $4)','8':'Med (under $10)','15':'Med high ($10+)','35':'Baller'};
-function regRow(r){const mine=ME?S.rate.find(x=>x.s==r.id&&x.p==ME):null,a=avgR(r.id),hg=(isH(r)?1:0)+(isG(r)?2:0),loc=locOf(r),t=tierOf(r),bn=beenOf(r)?'1':'0',cu=cuz(r).length==1?cuz(r)[0]:'';
-const rate=`<select aria-label="Rating out of 10" ${ME?'':'disabled'} onchange="setRate('${r.id}',this.value)">${opt('',ME?'Rating?':'Pick “Rating as” first',mine?String(mine.v):'')}${[1,2,3,4,5,6,7,8,9,10].map(n=>opt(String(n),'Rating '+n+' /10',mine?String(mine.v):'')).join('')}</select>`;
-const info=[t&&BUD[t],loc&&LBL(loc),cuz(r).join(' / '),beenOf(r)?'Already Been':'Never Been',isH(r)&&'Our Hearts',isG(r)&&'Hidden Gem'].filter(Boolean).map(x=>`<span class="tag">${esc(x)}</span>`).join('');
+function regRow(r){const me=ME?S.rate.find(x=>x.s==r.id&&x.p==ME):null,a=avgR(r.id),hg=(isH(r)?1:0)+(isG(r)?2:0),L=locList(r),t=tierOf(r),cu=cuz(r).length==1?cuz(r)[0]:'';
+const pb=r.been==null?'':r.been?'1':'0',myb=ed()?pb:(me&&me.b!=null?(me.b?'1':'0'):''),mv=me&&+me.v>0?String(me.v):'';
+const been=`<select aria-label="Already been" ${ME?'':'disabled'} onchange="${ed()?`editSpot('${r.id}',{been:this.value===''?null:this.value=='1'})`:`setMyBeen('${r.id}',this.value)`}">${opt('',ME?'Already / Never Been?':'Pick “Rating as” first',myb)}${opt('1','Already Been?',myb)}${opt('0','Never Been?',myb)}</select>`;
+const rate=myb=='1'?`<select aria-label="Rating out of 10" onchange="setRate('${r.id}',this.value)">${opt('','Rating?',mv)}${[1,2,3,4,5,6,7,8,9,10].map(n=>opt(String(n),'Rating '+n+' /10',mv)).join('')}</select>`:'';
+const info=[t&&BUD[t],L.length&&L.map(LBL).join(' · '),cuz(r).join(' / '),r.been!=null&&(r.been?'Already Been':'Never Been'),isH(r)&&'Our Hearts',isG(r)&&'Hidden Gem'].filter(Boolean).map(x=>`<span class="tag">${esc(x)}</span>`).join('');
+const locBox=`<details class="ms" ${V.locOpen===r.id?'open':''} ontoggle="V.locOpen=this.open?'${r.id}':(V.locOpen==='${r.id}'?null:V.locOpen)"><summary>${L.length?esc(L.map(LBL).join(', ')):'Location?'}</summary><div>${LOCS.map(d=>`<span class="chip ${L.includes(d)?'on':''}" onclick="togLoc('${r.id}','${d}')">${LBL(d)}</span>`).join('')}</div></details>`;
 return `<div class="row reg"><span class="sn" onclick="openSpot('${r.id}')">${esc(r.n)}${a!==null?`<br><small>crew ${a.toFixed(1)}/10</small>`:''}</span>
 ${ed()&&(!r.ok||V.edit===r.id)?`<div class="dd"><select aria-label="Budget" onchange="editSpot('${r.id}',{p:+this.value})">${opt('','Budget?',t)}${Object.entries(BUD).map(([v,l])=>opt(v,l,t)).join('')}</select>
-<select aria-label="Location" onchange="editSpot('${r.id}',{d:this.value})">${opt('','Location?',loc)}${LOCS.map(d=>opt(d,LBL(d),loc)).join('')}</select>
-<select aria-label="Cuisine" onchange="editSpot('${r.id}',{c:this.value,cs:null})">${opt('','Cuisine?',cu)}${[...CU,...AFT].map(c=>opt(c,c,cu)).join('')}</select>
-<select aria-label="Already been" onchange="editSpot('${r.id}',{been:this.value=='1'})">${opt('1','Already Been',bn)}${opt('0','Never Been',bn)}</select>
-${rate}<select aria-label="Our Hearts or Hidden Gems" onchange="setHG('${r.id}',+this.value)">${opt('0','Our Hearts / Hidden Gems?',String(hg))}${opt('1','Our Hearts',String(hg))}${opt('2','Hidden Gem',String(hg))}${opt('3','Our Hearts + Hidden Gem',String(hg))}</select><button class="btn s pk sv" onclick="V.edit=null;editSpot('${r.id}',{ok:true})">Save</button></div>`
-:`<div class="ri">${info}</div><div class="dd one">${rate}${ed()?`<button class="btn s ev" onclick="V.edit='${r.id}';render()">Edit</button>`:''}</div>`}</div>`}
-async function setRate(id,v){if(!ME){toast('Pick who you are under Rating as first.');return}const rid=id+'__'+ME.replace(/\s+/g,'_');if(!v){await delItem('rate',rid);return}await addItem('rate',{id:rid,s:id,p:ME,v:+v});if(+v>=9)burst()}
+<select aria-label="Cuisine" onchange="editSpot('${r.id}',{c:this.value,cs:null})">${opt('','Cuisine?',cu)}${[...CU,...AFT].sort((x,y)=>x.localeCompare(y)).map(c=>opt(c,c,cu)).join('')}</select>
+${locBox}${been}${rate}${pb=='1'?`<select aria-label="Our Hearts or Hidden Gems" onchange="setHG('${r.id}',+this.value)">${opt('0','Our Hearts / Hidden Gems?',String(hg))}${opt('1','Our Hearts',String(hg))}${opt('2','Hidden Gem',String(hg))}${opt('3','Our Hearts + Hidden Gem',String(hg))}</select>`:''}<button class="btn s pk sv" onclick="saveSpot('${r.id}')">Save</button></div>`
+:`<div class="ri">${info}</div><div class="dd one">${ed()?'':been}${rate}${ed()?`<button class="btn s ev" onclick="V.edit='${r.id}';render()">Edit</button>`:''}</div>`}</div>`}
+function togLoc(id,d){const r=byId(id),L=locList(r).filter(x=>x!==d);if(L.length==locList(r).length)L.push(d);L.sort((a,b)=>LOCS.indexOf(a)-LOCS.indexOf(b));V.locOpen=id;editSpot(id,{ds:L,d:L[0]||''})}
+function saveSpot(id){const r=byId(id),miss=[!tierOf(r)&&'Budget',!locList(r).length&&'Location',!cuz(r)[0]&&'Cuisine',r.been==null&&'Already Been'].filter(Boolean);
+if(miss.length){toast('Fill in '+miss.join(', ')+' before saving.');return}V.edit=null;V.locOpen=null;editSpot(id,{ok:true,ds:locList(r),d:locList(r)[0]})}
+async function setMyBeen(id,v){if(!ME){toast('Pick who you are under Rating as first.');return}const rid=id+'__'+ME.replace(/\s+/g,'_');if(v===''){await delItem('rate',rid);return}
+const cur=S.rate.find(x=>x.id==rid);await addItem('rate',{id:rid,s:id,p:ME,b:v=='1',v:v=='1'&&cur&&+cur.v>0?+cur.v:0})}
+async function setRate(id,v){if(!ME){toast('Pick who you are under Rating as first.');return}const rid=id+'__'+ME.replace(/\s+/g,'_');await addItem('rate',{id:rid,s:id,p:ME,b:true,v:+v||0});if(+v>=9)burst()}
 function setHG(id,v){const r=byId(id);if(!!(v&1)!=isH(r))setHeart(id,!!(v&1));if(!!(v&2)!=isG(r))setGem(id,!!(v&2))}
 const SORTS=[['az','A-Z'],['za','Z-A'],['cheap','cheapest first'],['dear','most expensive first'],['visits','most visited first'],['fresh','never been first'],['rated','top rated first']];
 function sortL(l,k){const cnt={};S.logs.forEach(x=>cnt[x.r]=(cnt[x.r]||0)+1);const nm=(a,b)=>a.n.localeCompare(b.n),pc=r=>r.p||null;
