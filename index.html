@@ -749,12 +749,15 @@ el.style.transform='translateX(105%)';el.style.visibility='visible';
 /* first shy peek */
 img.src=A.p[0];await slide('translateX(0)',700,'cubic-bezier(.3,.9,.4,1)');await wait(1300);if(gone)return;
 await slide('translateX(105%)',450,'ease-in');await wait(700);if(gone)return;
-/* second peek, a little braver: hmmm? */
-img.src=A.p[1];await slide('translateX(0)',600,'cubic-bezier(.3,.9,.4,1)');await wait(800);if(gone)return;img.src=A.p[2];await wait(700);if(gone)return;img.src=A.p[3];await wait(450);if(gone)return;
-/* hop out */
-img.src=A.p[4];await el.animate([{transform:'translate(0,0)'},{transform:`translate(${-G*.6}px,-34px)`,offset:.45},{transform:`translate(${-G}px,0)`}],{duration:520,easing:'ease-out',fill:'forwards'}).finished.catch(()=>{});
+/* second peek, a little braver */
+img.src=A.p[1];await slide('translateX(0)',600,'cubic-bezier(.3,.9,.4,1)');await wait(900);if(gone)return;img.src=A.p[2];await wait(800);if(gone)return;
+/* step out from behind the edge (keep her head where it was), then one smooth hop into the corner */
+const k=el.offsetWidth/220,D=Math.round((165-105.5)*k);el.getAnimations().forEach(a=>a.cancel());
+img.src=A.p[3];el.style.transform=`translateX(${D}px)`;await wait(260);if(gone)return;
+await el.animate([{transform:`translateX(${D}px)`},{transform:`translateX(${D-10}px) translateY(4px)`}],{duration:160,easing:'ease-out',fill:'forwards'}).finished.catch(()=>{});if(gone)return;
+img.src=A.p[4];await el.animate([{transform:`translate(${D-10}px,4px)`},{transform:`translate(${(D-10-G)/2}px,-38px)`,offset:.5},{transform:`translate(${-G}px,0)`}],{duration:620,easing:'cubic-bezier(.35,.1,.45,1)',fill:'forwards'}).finished.catch(()=>{});
 el.style.transform=`translateX(${-G}px)`;el.getAnimations().forEach(a=>a.cancel());if(gone)return;
-await play([A.p[5]],350);
+img.src=A.p[5];await el.animate([{transform:`translateX(${-G}px) scale(1.06,.94)`,transformOrigin:'50% 100%'},{transform:`translateX(${-G}px) scale(1)`,transformOrigin:'50% 100%'}],{duration:220,easing:'ease-out'}).finished.catch(()=>{});await wait(250);
 /* wave once: haaaai~ */
 say('Hiii, I’m Aina!\nI’m Mata’s lil sis!');await play([A.w[0],A.w[1],A.w[2],A.w[3],A.w[4],A.w[5],A.w[2],A.w[1]],150);await play([A.w[0]],1700);if(gone)return;
 say('You fav makan companion!');await play(A.t,75,3);await play([A.t[15]],700);if(gone)return;
