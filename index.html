@@ -317,7 +317,7 @@ return `<div class="hero"><h2 class="ht"><span>Lapar?</span><span>Let's hunt, Fo
 <div class="fact"><b>Did you know?</b> <span id="factx">${FACTS[FI<0?(FI=Math.floor(Math.random()*FACTS.length)):FI]}</span></div></div>`}
 function stats(){const mm=S.logs.filter(l=>l.d.startsWith(td().slice(0,7)));return `<div class="stats"><div><b>${mm.length}</b><span>outings this month</span></div><div><b>$${mm.reduce((a,l)=>a+l.amt,0).toFixed(0)}</b><span>spent this month</span></div><div><b>${all().length}</b><span>spots saved</span></div></div>`}
 function decide(){
-return `${modeBar()}${hero()}<p class="intro">Answer these 3 questions<br>to use the roulette wheel below</p>
+return `${modeBar()}${hero()}<p class="intro">Answer these 4 questions<br>to use the roulette wheel below</p>
 <div class="card bud">${H2('<span class="qn">Step 1:</span>Budget?<span class="qk" id="qk1">✓</span>')}<div class="bv" id="pl"></div>
 <small>Min</small><input type="range" min="0" max="60" value="${V.lo}" oninput="V.lo=Math.min(+this.value,V.hi);this.value=V.lo;V.a1=true;V.pb=null;res()">
 <small>Max</small><input type="range" min="0" max="60" value="${V.hi}" oninput="V.hi=Math.max(+this.value,V.lo);this.value=V.hi;V.a1=true;V.pb=null;res()">
@@ -330,7 +330,7 @@ return `${modeBar()}${hero()}<p class="intro">Answer these 3 questions<br>to use
 <div class="mood">${CR.map((c,i)=>`<button class="${V.moods.has(i)?'on':''}" aria-pressed="${V.moods.has(i)}" style="--vc:${c.c}" onclick="crave(${i})"><img src="${VIMG[i]}" alt=""><span class="vt"><b>${c.t}</b><em>${c.g}</em><small>${c.d}</small></span></button>`).join('')}</div>
 ${V.moods.size?`<div class="active"><span>Vibe${V.moods.size>1?'s':''}: ${[...V.moods].map(i=>esc(CR[i].t)).join(', ')}</span><button class="btn s" onclick="clearMood()">Clear</button></div>`:''}</div>
 <div class="card" id="wc">${H2('<span class="qn">Step 5:</span>Now time to spin the wheel!')}<div class="wbox"><svg class="ptr" viewBox="0 0 30 34" aria-hidden="true"><path fill="currentColor" stroke="#fff" stroke-width="2.5" d="M15 32 3 10a12 12 0 1124 0z"/></svg><canvas id="wh" width="600" height="600" role="img" aria-label="Restaurant roulette wheel"></canvas></div>
-<div class="wcap" id="wcap"></div><button class="btn" id="wb" onclick="spin()" disabled>Answer the 3 questions first</button><p class="need" id="wneed"></p></div>
+<div class="wcap" id="wcap"></div><button class="btn" id="wb" onclick="spin()" disabled>Answer the 4 questions first</button><p class="need" id="wneed"></p></div>
 <div id="pk"></div>
 <div class="card"><div class="hrow">${H2('Matches <span id="cnt"></span>')}</div><div class="sbar"><input type="search" id="mq" placeholder="Search restaurants & cafés" value="${esc(V.q)}" onkeydown="if(event.key=='Enter'){event.preventDefault();doSearch()}" enterkeyhint="search"><button class="btn sbtn" onclick="doSearch()" aria-label="Search">${SRCH}<span>Search</span></button></div><div id="res"></div></div>`}
 function dessert(){return `${modeBar()}<div class="card">${H2('Round Two: coffee, tea or dessert')}
@@ -401,7 +401,7 @@ p.innerHTML=`<div class="card big">${H2('The wheel has spoken')}<b>${esc(r.n)}</
 const ready=()=>!!(V.a1&&V.a3&&V.a4&&V.moods.size>0);
 function updSpin(){const b=$('wb');[[1,V.a1],[2,V.a3],[4,V.a4],[3,V.moods.size>0]].forEach(([n,ok])=>{const q=$('qk'+n);if(q)q.classList.toggle('on',!!ok)});
 if(!b||W.busy||W.rev)return;const ok=ready(),miss=[!V.a1&&'Step 1: Budget',!V.a3&&'Step 2: Location',!V.a4&&'Step 3: Cuisine',!V.moods.size&&'Step 4: Vibe'].filter(Boolean);
-b.disabled=!ok;b.textContent=ok?'Spin the wheel':'Answer the 3 questions first';const n=$('wneed');if(n)n.innerHTML=ok?'':'Still to answer:<br>'+miss.join('<br>')}
+b.disabled=!ok;b.textContent=ok?'Spin the wheel':'Answer the 4 questions first';const n=$('wneed');if(n)n.innerHTML=ok?'':'Still to answer:<br>'+miss.join('<br>')}
 /* doodle hearts: the i's in headings get heart dots; headings without an i get a heart perched on the first letter */
 const DH='<svg viewBox="0 0 24 22" aria-hidden="true"><path d="M12 20.5C7 16.7 2.2 13.4 2.2 8.3 2.2 5 4.6 2.6 7.5 2.6c2 0 3.6 1.1 4.5 2.8.9-1.7 2.5-2.8 4.5-2.8 2.9 0 5.3 2.4 5.3 5.7 0 5.1-4.8 8.4-9.8 12.2z" fill="#ff8fbf" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>';
 function hearts(root){(root||document).querySelectorAll('h1,h2:not(.ht),.ht>span').forEach(el=>{if(el.dataset.dh)return;el.dataset.dh=1;if(!el.hasAttribute('aria-label'))el.setAttribute('aria-label',el.textContent.trim());
