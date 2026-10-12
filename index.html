@@ -450,7 +450,7 @@ const at=m.filter(l=>isAft(byId(l.r)||{})).reduce((a,l)=>a+l.amt,0);
 S.logs.forEach(l=>cnt[l.r]=(cnt[l.r]||0)+1);
 const top=Object.entries(cnt).sort((a,b)=>b[1]-a[1]);
 const opt=r=>`<option value="${r.id}" ${r.id==V.pre?'selected':''}>${esc(r.n)}</option>`;
-return `${modeBar()}<div class="card">${H2('Log a meal')}<p class="hint">Record what you spent so the summary, trail and calendar stay up to date.</p>
+return `${modeBar()}<div class="card">${H2('Log a meal')}<p class="hint">Record your meals so the monthly summary, food trail and calendar stay up to date.</p>
 <label>Where</label><input type="search" id="lq" placeholder="Search for a place" oninput="lqf(this.value)" style="margin-bottom:6px"><select id="lr"><optgroup label="Mains">${sortL(all().filter(r=>!isAft(r)),'az').map(opt).join('')}</optgroup><optgroup label="Dessert">${sortL(all().filter(isAft),'az').map(opt).join('')}</optgroup></select>
 <label>Date</label><input type="date" id="ld" value="${td()}">
 <label>Total spent (BND)</label><input type="number" id="la" step="0.01" min="0" inputmode="decimal">
