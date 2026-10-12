@@ -494,7 +494,7 @@ const offDuty=x=>/^(away|on call)/i.test(x.l||'');
 function rota(){const E=S.rota.filter(x=>x.d==V.day),hz=E.find(x=>x.p=='Haziq'),
 dr=hz&&!offDuty(hz)?E.filter(x=>x.p!='Haziq'&&!offDuty(x)&&norm(x.l)==norm(hz.l)&&canDrive(x)):[];
 const by={};E.forEach(x=>(by[x.l]=by[x.l]||[]).push(x.p));
-return `${modeBar()}<div class="card">${H2('Our Rota and Rides')}<p class="hint">Pick a date to see where everyone is<br>to find out who can give our passenger prince ✨Haziq✨ a lift.</p><input type="date" value="${V.day}" onchange="V.day=this.value;render()">
+return `${modeBar()}<div class="card">${H2('Our Rota and Rides')}<p class="hint">Pick a date to see where everyone is to find out who can give our passenger prince ✨Haziq✨ a lift.</p><input type="date" value="${V.day}" onchange="V.day=this.value;render()">
 ${hz?`<div class="prince">${av('Haziq',34)} Haziq is at <b>${esc(hz.l)}</b><br>${dr.length?'His chauffeur options: <b>'+dr.map(x=>av(x.p,28)+esc(x.p)).join(' &nbsp; ')+'</b>':'No one else is there, so no ride today'}</div>`:'<p class="hint tight">No location for Haziq on this day.</p>'}
 ${Object.entries(by).map(([l,ps])=>`<div class="row"><span>${esc(l)}</span><span class="avs">${ps.map(p=>av(p,32)).join('')}</span></div>`).join('')||'<p class="hint tight">No rota for this day yet.</p>'}
 ${E.length?`<label>Who's doing what</label>${E.slice().sort((a,b)=>P.indexOf(a.p)-P.indexOf(b.p)).map(x=>`<div class="row"><span>${av(x.p,28)}<b>${esc(x.p)}</b><br><small>${esc(x.l)}${x.n?' · '+esc(x.n):''}</small></span></div>`).join('')}`:''}</div>
