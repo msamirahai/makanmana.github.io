@@ -116,7 +116,7 @@ background-image:linear-gradient(90deg,transparent 49.6%,rgba(74,58,120,.08) 50%
 .rsc small{font-weight:600;opacity:.85;font-size:11px;margin-left:1px}
 .rsc.none{background:transparent;color:var(--mut);border:1.5px dashed color-mix(in srgb,var(--mut) 45%,transparent);font-size:11px;font-weight:700;padding:3px 9px}
 .rsub{margin:0;font-size:13.5px;line-height:1.4;color:var(--ink);opacity:.82}
-.rlab{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.rlab{margin:0 0 3px;padding:0;font-size:13px;font-weight:800;line-height:1.35;color:var(--pk)}
 .rnt{margin:6px 0 0;font-size:13px;font-style:italic;color:var(--mut);border-left:3px solid color-mix(in srgb,var(--pk) 45%,transparent);padding-left:8px}
 .ryou{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;margin-top:4px;padding:8px 10px;border-radius:12px;background:color-mix(in srgb,var(--pk) 10%,transparent);font-size:13.5px}
 .ryou .yv{margin-left:6px}.ryou .yv.mute{color:var(--mut)}
@@ -653,7 +653,7 @@ const pb=r.been==null?'':r.been?'1':'0',myb=ed()?pb:(me&&me.b!=null?(me.b?'1':'0
 const been=`<select aria-label="Already been" ${ME?'':'disabled'} onchange="${ed()?`editSpot('${r.id}',{been:this.value===''?null:this.value=='1'})`:`setMyBeen('${r.id}',this.value)`}">${opt('',ME?'Already Been / Never Been?':'Pick “Rating as” first',myb)}${opt('1','Already Been',myb)}${opt('0','Never Been',myb)}</select>`;
 const rate=myb=='1'?`<select aria-label="Rating out of 10" onchange="setRate('${r.id}',this.value)">${opt('','Rating?',mv)}${[1,2,3,4,5,6,7,8,9,10].map(n=>opt(String(n),'Rating '+n+' /10',mv)).join('')}</select>`:'';
 const sub=[aft?'Dessert':'Main Meal',t&&BUD[t],L.length&&L.map(LBL).join(', '),C.join(' / '),ed()&&r.been!=null&&(r.been?'Already been':'Never been')].filter(Boolean).join(' · ');
-const info=`<p class="rsub">${esc(sub)}</p>${LB.length?`<div class="rlab">${LB.map(k=>`<span class="tag">${esc(LABN[k])}</span>`).join('')}</div>`:''}${r.note?`<p class="rnt">${esc(r.note)}</p>`:''}`;
+const info=`${LB.length?`<p class="rlab">${LB.map(k=>esc(LABN[k])).join(' · ')}</p>`:''}<p class="rsub">${esc(sub)}</p>${r.note?`<p class="rnt">${esc(r.note)}</p>`:''}`;
 const box=(key,label,items,on,fn)=>`<details class="ms" ${V.open===r.id+key?'open':''} ontoggle="V.open=this.open?'${r.id+key}':(V.open==='${r.id+key}'?null:V.open)"><summary>${on.length?esc(on.map(k=>items.find(x=>x[0]==k)?.[1]||k).join(', ')):label}</summary><div>${items.map(([k,l])=>`<span class="chip ${on.includes(k)?'on':''}" onclick="${fn}('${r.id}','${k.replace(/'/g,"\\'")}')">${esc(l)}</span>`).join('')}</div></details>`;
 return `<div class="row reg"><div class="rhead"><span class="sn" onclick="openSpot('${r.id}')">${esc(r.n)}</span>${a!==null?`<span class="rsc" title="Crew average">★ ${a.toFixed(1)}<small>/10</small></span>`:`<span class="rsc none">No ratings yet</span>`}</div>
 ${ed()&&(!r.ok||V.edit===r.id)?`<div class="dd">
