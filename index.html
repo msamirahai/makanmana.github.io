@@ -788,12 +788,12 @@ w.animate([{opacity:1},{opacity:0,transform:getComputedStyle(w).transform+' scal
 /* dance along: a slow, wobbly baby twirl from xa to xb */
 const dance=(xa,xb,T)=>new Promise(res=>{const t0=performance.now();let fi=-1;const step=now=>{if(done)return res();const k=Math.min(1,(now-t0)/T),x=xa+(xb-xa)*k,b=Math.abs(Math.sin(k*Math.PI*4))*-8,r=Math.sin(k*Math.PI*7)*5;w.style.transform=`translate(${x}px,${b}px)`;im.style.transform=`rotate(${r}deg)`;const f=Math.floor((now-t0)/300)%A.d.length;if(f!==fi){fi=f;im.src=A.d[f]}if(k<1)requestAnimationFrame(step);else{im.style.transform='';res()}};requestAnimationFrame(step)});
 const at=(i,dx,ms)=>{if(done)return;im.src=i;w.style.transform=`translate(${x1+(dx||0)}px,0)`;return wait(ms)};
-w.style.visibility='visible';setTimeout(()=>{if(!done)talk('Wheee!',2000)},1100);await dance(x0,x1,4600);if(done)return;
+w.style.visibility='visible';setTimeout(()=>{if(!done)talk('wheee',2000)},1100);await dance(x0,x1,4600);if(done)return;
 /* oops: trip, one tumble, and flop onto the floor */
 const fx=[0,6,14,22,28,34,34];for(let i=0;i<5;i++){await at(A.f[i],fx[i],i<2?200:170);if(done)return}
-talk('Ooofff!',1700);im.animate([{transform:'scale(1.08,.9)',transformOrigin:'50% 100%'},{transform:'scale(1)',transformOrigin:'50% 100%'}],{duration:260,easing:'ease-out'});await at(A.f[5],34,900);await at(A.f[6],34,900);await at(A.u[0],34,700);if(done)return;
+talk('oooff',1700);im.animate([{transform:'scale(1.08,.9)',transformOrigin:'50% 100%'},{transform:'scale(1)',transformOrigin:'50% 100%'}],{duration:260,easing:'ease-out'});await at(A.f[5],34,900);await at(A.f[6],34,900);await at(A.u[0],34,700);if(done)return;
 /* gets back up by herself and dusts off */
-await at(A.u[1],30,450);await at(A.u[2],24,500);await at(A.u[3],16,350);if(done)return;talk('It’s okay! hehe',2200);
+await at(A.u[1],30,450);await at(A.u[2],24,500);await at(A.u[3],16,350);if(done)return;talk('I’m okay!',2200);
 for(let n=0;n<4&&!done;n++)await at(A.u[3+n%2],16,260);if(done)return;
 /* waves to the screen again */
 await at(A.u[5],16,350);for(const f of A.w){await at(f,16,170);if(done)return}await at(A.u[6],16,700);if(done)return;
