@@ -997,8 +997,11 @@ stand(A.t,220,247,239);for(let i=0;i<A.t.length;i++){if(!run.alive)return;st.sho
 stand(A.w,220,247,239);for(let i=0;i<A.w.length;i++){if(!run.alive)return;st.show(i);await wait(170)}await wait(300);
 /* 5. then she sits on the edge, legs swinging over it, head bobbing to a little tune; she stays until you scroll her away or switch tabs */
 const seat=f=>Ly-(f<3?312:300)*DS;stand(STR,300,330,300);for(const f of [3,4,5,6,7]){if(!run.alive)return;st.show(f);place(seat(f));await wait(260)}
-const loop=[8,9,10,11,12,13,14,15,14,13,12,11,10,9];ts=T();let lf=-1;
-while(run.alive){await tick();const t=(T()-ts)/1000,f=loop[Math.floor(t/.48)%loop.length];if(f!==lf){lf=f;st.show(f);place(seat(f))}
+/* calm and content, humming to herself: she rests with a happy smile, and every few seconds tilts her head the other way */
+let side=0,n=0,lf=-1,next=T()+3000+Math.random()*1500;
+while(run.alive){await tick();const now=T();
+if(now>next){side=1-side;n++;next=now+3000+Math.random()*1500}
+const f=n%4===3?(side?15:14):(side?13:10);if(f!==lf){lf=f;st.show(f);place(seat(f))}
 const r=w.getBoundingClientRect();if(document.hidden||r.bottom<0||r.top>innerHeight||r.right<0||r.left>innerWidth){run.alive=false;w.remove()}}}})();window.ainaMoves=MOVES;let lastM=-1;const busy=()=>document.hidden||document.querySelector('#ainaw,#aina2,.ainam,.ainap,.ainad,.ainaf');
 (async()=>{try{await introP}catch(e){}for(;;){while(busy())await wait(100);let i=Math.floor(Math.random()*MOVES.length);if(MOVES.length>1&&i===lastM)i=(i+1)%MOVES.length;lastM=i;try{await MOVES[i]()}catch(e){await wait(1000)}}})();})();
 const P_=['Ms Fii','Nadiah','Abraham','Amirah','Atiqah','Haziq','Aida','Faris'];
