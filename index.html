@@ -352,7 +352,7 @@ if(V.tab=='decide'){res();drawWheel(true)}
 /* ---------- moods ---------- */
 const CR=[
 {n:'02',t:'Main Character Era',g:'Premium & fancy dining',d:'Because the plot requires a treat that makes us feel expensive (and a little iconic).',lo:30,c:'#ffa8cb'},
-{n:'06',t:'Certified 10/10',g:'Favourites & trusted hits',d:'Old but gold: our saved spots and 10/10s that never disappoint.',fav:true,c:'#ffbba3'},
+{n:'06',t:'Our Hearts',g:'Favourites & trusted hits',d:'Old but gold: our saved spots that never disappoint.',fav:true,c:'#ffbba3'},
 {n:'08',t:'Summer Body Delulu',g:'Healthy-ish & lighter meals',d:'Salads, grilled options and balanced bowls for our future selves (or at least until tomorrow).',cu:['Healthy','Japanese','Korean','Brunch'],c:'#b0e3c6'},
 {n:'03',t:'A Big Hug',g:'Soupy, warm & comfort food',d:'Soup, mala, hotpot and steamboat for rainy days, cold AC or a heavy heart.',cu:['Chinese','Japanese','Korean','Vietnamese','Thai','Malay','Local'],c:'#a8c8f5'},
 {n:'01',t:'Kampong Kind of Love',g:'Local & Bruneian classics',d:'Ambuyat, nasi katok, local kuih and all our hometown favourites.',cu:['Local','Malay'],c:'#a9dcb3'},
@@ -397,7 +397,7 @@ function tier(i){const x=TIERS[i];V.pb=null;if(V.a1&&V.lo==x[1]&&V.hi==x[2]){V.l
 const pOK=r=>r.p?(r.p>=V.lo&&r.p<=V.hi):(V.lo==0&&V.hi==60);
 /* districts, worked out from each place's area */
 const DIST=['Brunei-Muara','Tutong','Belait','Temburong','Miri'];
-const SUBS=[['Batu Besurat',/batu besurat/],['Batu Satu',/batu satu/],['Berakas',/berakas/],['Beribi',/beribi/],['Kiarong',/kiarong/],['Kiulap',/kiulap/],['Madang',/madang/]];
+const SUBS=[['Batu Besurat',/batu besurat/],['Batu Satu',/batu satu/],['Berakas',/berakas/],['Beribi',/beribi/],['Gadong',/gadong/],['Jerudong',/jerudong/],['Kiarong',/kiarong/],['Kiulap',/kiulap/],['Madang',/madang/]];
 const LOCS=['Brunei-Muara',...SUBS.map(x=>x[0]+', Brunei-Muara'),'Tutong','Belait','Temburong','Miri'];
 const LBL=d=>d=='Brunei-Muara'?'Anywhere in Brunei-Muara':d.replace(', Brunei-Muara','');
 const dsOf=r=>r.ds&&r.ds.length?r.ds:r.d?[r.d]:[];
@@ -412,7 +412,7 @@ function tl(d){V.loc.has(d)?V.loc.delete(d):V.loc.add(d);V.a3=V.loc.size>0;rende
 function tg(c){V.cu.has(c)?V.cu.delete(c):V.cu.add(c);V.a4=V.cu.size>0;render()}
 function match(){const q=V.q.toLowerCase(),seen=new Set(S.logs.map(l=>l.r));
 const usual=new Set(Object.entries(S.logs.reduce((o,l)=>{const r=byId(l.r);if(r)o[r.c]=(o[r.c]||0)+1;return o},{})).sort((a,b)=>b[1]-a[1]).slice(0,3).map(x=>x[0]));
-return all().filter(r=>!isAft(r)&&(!q||(r.n+' '+r.c+' '+(r.a||'')+' '+(r.note||'')+kbT(r)).toLowerCase().includes(q))&&pOK(r)&&locOK(r,q)&&(!V.cu.size||cuz(r).some(c=>V.cu.has(c)))&&(!V.hrt||isH(r))&&(!V.late||hasT(r,'late'))&&(!V.try||hasT(r,'try'))&&(!V.moods.size||[...V.moods].some(i=>{const m=CR[i];return(r.v||[]).includes(m.t)||((!m.cu||cuz(r).some(c=>m.cu.includes(c)))&&(!m.fav||hasT(r,'fav'))&&(!m.adv||(!beenOf(r)&&!usual.has(r.c)))&&(m.lo==null||(r.p&&r.p>=m.lo)))}))&&(!V.unv||!seen.has(r.id))&&(!V.gm||isG(r))&&(!V.nw||r.nw)&&true)}
+return all().filter(r=>!isAft(r)&&(!q||(r.n+' '+r.c+' '+(r.a||'')+' '+(r.note||'')+kbT(r)).toLowerCase().includes(q))&&pOK(r)&&locOK(r,q)&&(!V.cu.size||cuz(r).some(c=>V.cu.has(c)))&&(!V.hrt||isH(r))&&(!V.late||hasT(r,'late'))&&(!V.try||hasT(r,'try'))&&(!V.moods.size||[...V.moods].some(i=>{const m=CR[i];return(r.v||[]).includes(m.t)||((!m.cu||cuz(r).some(c=>m.cu.includes(c)))&&(!m.fav||hasT(r,'fav')||isH(r)||(r.v||[]).includes('Certified 10/10'))&&(!m.adv||(!beenOf(r)&&!usual.has(r.c)))&&(m.lo==null||(r.p&&r.p>=m.lo)))}))&&(!V.unv||!seen.has(r.id))&&(!V.gm||isG(r))&&(!V.nw||r.nw)&&true)}
 function res(){drawWheel();const m=sortL(match(),'az'),cnt={};S.logs.forEach(l=>cnt[l.r]=(cnt[l.r]||0)+1);
 $('pl').textContent=`BND ${V.lo} – ${V.hi}${V.hi==60?'+':''}`;$('cnt').textContent=`(${m.length})`;
 updSpin();$('res').innerHTML=m.map(r=>`<div class="row"><span class="sn" onclick="openSpot('${r.id}')">${esc(r.n)}</span><span class="rb"><button class="btn s" onclick="goLog('${r.id}')">Log</button></span></div>`).join('')||'<small>Nothing matches. Try widening the budget or clearing a filter.</small>'}
@@ -643,7 +643,7 @@ ${V.ai?V.ai.map((r,i)=>`<div class="row"><span><b>${esc(r.name)}</b><span class=
 ${(()=>{const SL=spotList(),ok=SL.filter(r=>r.ok),un=SL.filter(r=>!r.ok);V.unN=un.length;return `${V.dq?`<p class="hint" style="margin-top:8px">${SL.length} result(s) for "${esc(V.dq)}" (${ok.length} here, ${un.length} in Unsorted) · <a href="#" onclick="V.dq='';render();return false">clear</a></p>`:''}<div id="dlist"></div>${ok.length?ok.map(regRow).join(''):`<p class="hint" style="margin-top:10px">${V.dq?'No saved places match.':'Nothing saved yet. Places move here from Unsorted once their details are saved.'}</p>`}</div>
 <div class="card unsorted"><div class="hrow">${H2('Unsorted ('+un.length+')')}</div><p class="hint">Places whose details haven’t been saved yet. Once you tap Save on one, it moves up into Our Makan Registry.</p>${un.map(regRow).join('')||`<p class="hint">All sorted! 🎉</p>`}</div>`})()}`}
 /* each place in the registry gets dropdowns that save for everyone */
-const LABELS=[['heart','Our Hearts'],['g','Hidden Gems'],['nw','Newly Opened'],...['Main Character Era','Certified 10/10','Summer Body Delulu','A Big Hug','Kampong Kind of Love','Hunger Speedrun','Sweet Little Escapes','New Lore Unlocked'].map(t=>['v:'+t,t])];
+const LABELS=[['heart','Our Hearts'],['g','Hidden Gems'],['nw','Newly Opened'],...['Main Character Era','Summer Body Delulu','A Big Hug','Kampong Kind of Love','Hunger Speedrun','Sweet Little Escapes','New Lore Unlocked'].map(t=>['v:'+t,t])];
 const tierOf=r=>!r.p?'':r.p<=4?'4':r.p<=10?'8':r.p<30?'15':'35';
 const opt=(v,l,cur)=>`<option value="${v}" ${v===cur?'selected':''}>${l}</option>`;
 const EDITOR='Amirah',ed=()=>ME===EDITOR;
@@ -672,9 +672,9 @@ ${box('B','Labels?',LABELS,LB,'togLab')}
 :`<div class="ri">${info}</div><div class="ryou"><span><b>Your rating</b> ${myb=='1'?`<span class="yv">Been${mv?` · <b>${mv}/10</b>`:' · no score yet'}</span>`:myb=='0'?'<span class="yv">Never been</span>':'<span class="yv mute">Not rated yet</span>'}</span><button class="btn s ev" onclick="V.myEdit='${r.id}';V.mp={b:'${myb}',v:'${mv}'};render()">Edit</button></div>`}</div>`}
 async function saveMine(id){const m=V.mp||{b:'',v:''};if(m.b=='1'&&m.v)await setRate(id,m.v);else await setMyBeen(id,m.b);V.myEdit=null;render();toast('Saved')}
 const LABN=Object.fromEntries(LABELS);
-const labsOf=r=>[isH(r)&&'heart',isG(r)&&'g',r.nw&&'nw',...(r.v||[]).map(t=>'v:'+t)].filter(Boolean);
+const labsOf=r=>[(isH(r)||(r.v||[]).includes('Certified 10/10'))&&'heart',isG(r)&&'g',r.nw&&'nw',...(r.v||[]).filter(t=>t!=='Certified 10/10').map(t=>'v:'+t)].filter(Boolean);
 function togCu(id,c){const r=byId(id),C=cuz(r).filter(x=>x&&x!='Mixed'),N=C.includes(c)?C.filter(x=>x!==c):[...C,c];V.open=id+'C';editSpot(id,{cs:N,c:N.join(' / ')})}
-function togLab(id,k){const r=byId(id);V.open=id+'B';if(k=='heart')return setHeart(id,!isH(r));if(k=='g')return setGem(id,!isG(r));if(k=='nw')return editSpot(id,{nw:!r.nw});
+function togLab(id,k){const r=byId(id);V.open=id+'B';if(k=='heart'){const old=(r.v||[]).includes('Certified 10/10');if(isH(r)||old){if(old)editSpot(id,{v:r.v.filter(t=>t!=='Certified 10/10')});return isH(r)&&setHeart(id,false)}return setHeart(id,true)}if(k=='g')return setGem(id,!isG(r));if(k=='nw')return editSpot(id,{nw:!r.nw});
 const t=k.slice(2),v=r.v||[];editSpot(id,{v:v.includes(t)?v.filter(x=>x!==t):[...v,t]})}
 function togLoc(id,d){const r=byId(id),L=locList(r).filter(x=>x!==d);if(L.length==locList(r).length)L.push(d);L.sort((a,b)=>LOCS.indexOf(a)-LOCS.indexOf(b));V.open=id+'L';editSpot(id,{ds:L,d:L[0]||''})}
 function saveSpot(id){const r=byId(id),miss=[!tierOf(r)&&'Budget',!locList(r).length&&'Location',!cuz(r).filter(c=>c&&c!='Mixed').length&&'Cuisine',r.been==null&&'Already Been'].filter(Boolean);
