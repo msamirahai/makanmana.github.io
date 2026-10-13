@@ -797,7 +797,7 @@ say('You fav makan companion!');await play(A.t,75,3);await play([A.t[15]],700);i
 /* jump and vanish into sparkles */
 img.src=A.t[0];await el.animate([{transform:`translateX(${-G}px) translateY(0)`},{transform:`translateX(${-G}px) translateY(-14px)`}],{duration:260,easing:'ease-out',fill:'forwards'}).finished.catch(()=>{});poof();await wait(450);await danceFall()})();
 async function danceFall(){const it=document.querySelector('.intro');if(!it)return;const w=document.createElement('div');w.id='aina2';w.innerHTML='<p class="ab2"></p><img alt="Aina dancing">';document.body.appendChild(w);
-const im=w.querySelector('img'),W=w.offsetWidth,H=w.offsetHeight,ir=it.getBoundingClientRect(),y=ir.top+scrollY+ir.height/2-H*.62,x0=-W,x1=Math.round(document.documentElement.clientWidth*.58-W/2);let done=false;const ab=w.querySelector('.ab2'),talk=(t,ms)=>{ab.textContent=t;ab.classList.add('on');clearTimeout(talk.h);talk.h=setTimeout(()=>ab.classList.remove('on'),ms)};
+const im=w.querySelector('img'),W=w.offsetWidth,H=w.offsetHeight,ir=it.getBoundingClientRect(),y=ir.top+scrollY+ir.height/2-H*.62,x0=-W,x1=Math.round(document.documentElement.clientWidth*.58-W/2);let done=false;const ab=w.querySelector('.ab2'),talk=(t,ms,top)=>{ab.style.bottom=`calc(${((1-(top||.21))*100).toFixed(1)}% + 6px)`;ab.textContent=t;ab.classList.add('on');clearTimeout(talk.h);talk.h=setTimeout(()=>ab.classList.remove('on'),ms)};
 w.style.top=y+'px';w.style.left='0px';w.addEventListener('click',()=>{done=true;burst2()});
 const burst2=()=>{const r=im.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;for(let i=0;i<14;i++){const s=document.createElement('span');s.className='tsp';s.innerHTML=i%4==3?GDOT:GSTAR(['#fff','#ffe7a3','#ffd1e6','#c9e8ff'][i%4]);const a=i/14*Math.PI*2,d=36+Math.random()*44,z=9+Math.random()*11;
 s.style.cssText=`left:${cx}px;top:${cy}px;width:${z}px;height:${z}px;margin:${-z/2}px 0 0 ${-z/2}px`;document.body.appendChild(s);s.animate([{transform:'scale(.2)',opacity:1},{transform:`translate(${Math.cos(a)*d}px,${Math.sin(a)*d-14}px) scale(1.1) rotate(120deg)`,opacity:1,offset:.5},{transform:`translate(${Math.cos(a)*d*1.3}px,${Math.sin(a)*d*1.3}px) scale(.2) rotate(240deg)`,opacity:0}],{duration:1100+Math.random()*300,easing:'cubic-bezier(.2,.7,.3,1)'}).finished.then(()=>s.remove(),()=>s.remove())}
@@ -808,9 +808,9 @@ const at=(i,dx,ms)=>{if(done)return;im.src=i;w.style.transform=`translate(${x1+(
 w.style.visibility='visible';setTimeout(()=>{if(!done)talk('wheee',2000)},1100);await dance(x0,x1,4600);if(done)return;
 /* oops: trip, one tumble, and flop onto the floor */
 const fx=[0,6,14,22,28,34,34];for(let i=0;i<5;i++){await at(A.f[i],fx[i],i<2?200:170);if(done)return}
-talk('oooff',1700);im.animate([{transform:'scale(1.08,.9)',transformOrigin:'50% 100%'},{transform:'scale(1)',transformOrigin:'50% 100%'}],{duration:260,easing:'ease-out'});await at(A.f[5],34,900);await at(A.f[6],34,900);await at(A.u[0],34,700);if(done)return;
+talk('oooff',1700,.43);im.animate([{transform:'scale(1.08,.9)',transformOrigin:'50% 100%'},{transform:'scale(1)',transformOrigin:'50% 100%'}],{duration:260,easing:'ease-out'});await at(A.f[5],34,900);await at(A.f[6],34,900);await at(A.u[0],34,700);if(done)return;
 /* gets back up by herself and dusts off */
-await at(A.u[1],30,450);await at(A.u[2],24,500);await at(A.u[3],16,350);if(done)return;talk('I’m okay!',2200);
+await at(A.u[1],30,450);await at(A.u[2],24,500);await at(A.u[3],16,350);if(done)return;talk('I’m okay!',2200,.2);
 for(let n=0;n<4&&!done;n++)await at(A.u[3+n%2],16,260);if(done)return;
 /* waves to the screen again */
 await at(A.u[5],16,350);for(const f of A.w){await at(f,16,170);if(done)return}await at(A.u[6],16,700);if(done)return;
@@ -878,8 +878,9 @@ im.src=PK[0];b.style.transform='translateY(100%)';
 /* rises slowly until just her eyes show over the edge, has a look, then pops up */
 await b.animate([{transform:'translateY(100%)'},{transform:'translateY(0)'}],{duration:900,easing:'cubic-bezier(.3,.8,.4,1)',fill:'forwards'}).finished.catch(()=>{});b.style.transform='translateY(0)';
 await at(0,1100);if(m.done)return wait(500);bob();await at(1,600);
-/* waves hello */
-for(const f of [2,3,4,5,6,4,2,3]){await at(f,300);if(m.done)return wait(500)}
+/* smiles about, and waves hello just once: a random one of her three waves at a random moment */
+const idle=[3,5,1],seq=[];for(let k=0;k<3;k++)seq.push(idle[Math.floor(Math.random()*3)]);seq.splice(Math.floor(Math.random()*4),0,[2,4,6][Math.floor(Math.random()*3)]);
+for(const f of seq){const wv=f==2||f==4||f==6;await at(f,wv?850:420+Math.random()*260);if(m.done)return wait(500)}
 /* and ducks back down */
 await at(1,350);await at(0,450);if(m.done)return wait(500);
 await b.animate([{transform:'translateY(0)'},{transform:'translateY(100%)'}],{duration:700,easing:'cubic-bezier(.6,0,.8,.5)',fill:'forwards'}).finished.catch(()=>{});
