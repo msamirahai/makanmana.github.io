@@ -142,6 +142,12 @@ background-image:linear-gradient(90deg,transparent 49.6%,rgba(74,58,120,.08) 50%
 .ainad{position:fixed;left:0;top:0;width:88px;height:111px;z-index:400;pointer-events:none;transform-origin:50% 2%;will-change:transform}
 .ainad img{position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity .08s linear;transform:scaleX(var(--fx,1));filter:drop-shadow(0 8px 10px rgba(90,60,110,.28))}
 .ainad img.on{opacity:1}
+.ainadb{position:fixed;left:0;top:0;z-index:401;margin:0;white-space:nowrap;pointer-events:none;background:#fffaf3;color:#43355a;font:700 14px/1.2 'Quicksand',sans-serif;padding:6px 13px;border-radius:14px;border:1.5px solid var(--pk);box-shadow:0 5px 14px rgba(90,60,110,.22);opacity:0;transition:opacity .2s}
+.ainadb.on{opacity:1}
+.ainadb::before,.ainadb::after{content:'';position:absolute;left:12px;top:100%;border:7px solid transparent;border-top-color:var(--pk);border-left-color:var(--pk)}
+.ainadb::after{left:14px;border-width:5px;border-top-color:#fffaf3;border-left-color:#fffaf3;margin-top:-3px}
+.ainadb.lf::before{left:auto;right:12px;border-left-color:transparent;border-right-color:var(--pk)}
+.ainadb.lf::after{left:auto;right:14px;border-left-color:transparent;border-right-color:#fffaf3}
 #aina,#aina2,.ainam,.ainap>div{touch-action:none;-webkit-user-select:none;user-select:none}
 #aina img,#aina2 img,.ainam img,.ainap img{-webkit-user-drag:none;user-drag:none}
 .ainap{left:0;top:0;width:100px;height:80px;overflow:hidden;z-index:297;pointer-events:none}
@@ -901,7 +907,8 @@ document.addEventListener('dragstart',e=>{if(e.target.closest&&e.target.closest(
 function grab(x,y,id){const w=document.createElement('div');w.className='ainad';w.innerHTML=GR.map(s=>`<img alt="" src="${s}">`).join('');w.firstChild.alt='Aina being carried';document.body.appendChild(w);
 const imgs=[...w.children],PX=w.offsetWidth*.5,PY=w.offsetHeight*5/265;let cur=-1,Z=1,fl=1;
 const show=(f,flip)=>{const fx=flip?-1:1;if(f===cur&&fx===fl)return;const old=cur;cur=f;fl=fx;w.style.setProperty('--fx',fx);imgs[f].style.zIndex=++Z;imgs[f].classList.add('on');if(old>=0&&old!==f)setTimeout(()=>{if(old!==cur)imgs[old].classList.remove('on')},100)};
-const d=dg={w,id,px:x,py:y,lx:x,ly:y,svx:0,svy:0,pvx:0,th:0,om:0,still:0,face:1,t:performance.now(),show,PX,PY};show(0,false);d.exNext=performance.now()+900+Math.random()*900;d.exUntil=0;
+const sb=document.createElement('p');sb.className='ainadb';document.body.appendChild(sb);
+const d=dg={w,sb,k:0,sayUntil:0,say(t,ms){sb.textContent=t;sb.classList.add('on');this.sayUntil=performance.now()+ms},id,px:x,py:y,lx:x,ly:y,svx:0,svy:0,pvx:0,th:0,om:0,still:0,face:1,t:performance.now(),show,PX,PY};show(0,false);d.exNext=performance.now()+900+Math.random()*900;d.exUntil=0;
 const step=now=>{if(dg!==d)return;const dt=Math.min(.04,Math.max(.004,(now-d.t)/1000));d.t=now;
 const vx=(d.px-d.lx)/dt,vy=(d.py-d.ly)/dt;d.lx=d.px;d.ly=d.py;d.svx=d.svx*.75+vx*.25;d.svy=d.svy*.75+vy*.25;const ax=(d.svx-d.pvx)/dt;d.pvx=d.svx;
 /* a pendulum hanging from the scruff: moving your finger swings her body the other way, gravity brings her back, and she slowly settles */
@@ -910,11 +917,13 @@ w.style.transform=`translate3d(${d.px-PX}px,${d.py-PY}px,0) rotate(${d.th}rad)`;
 const sp=Math.abs(d.svx),moving=sp>45||Math.abs(d.svy)>60||Math.abs(d.om)>.7;d.still=moving?0:d.still+dt;
 if(sp>45)d.face=d.svx>0?1:-1;
 /* her face follows what is happening: looking the way she is carried, peeking down when lifted, giggling mid-swing, and every couple of seconds a happy wriggle and wave */
-if(!ex&&now>d.exNext&&d.svy>-260){d.exUntil=now+900+Math.random()*700;d.exNext=d.exUntil+1600+Math.random()*2200}
+/* she takes turns: a wave, then "wheee", then "where we goinnnn" */
+if(!ex&&now>d.exNext&&d.svy>-260){const kind=d.k++%3;if(kind==0)d.exUntil=now+900+Math.random()*700;else{d.say(kind==1?'wheee':'where we goinnnn',1800);d.exUntil=now+600}d.exNext=now+2300+Math.random()*1700}
+if(now>d.sayUntil)sb.classList.remove('on');{const vw=innerWidth,left=d.px>vw-170;sb.classList.toggle('lf',left);sb.style.transform=`translate3d(${left?d.px-30-sb.offsetWidth:d.px+30}px,${d.py-34}px,0)`}
 if(d.svy<-260)show(3,d.face<0);else if(now<d.exUntil){const X=[0,7,6,7,5,7];show(X[Math.floor(now/150)%X.length],d.face<0&&sp>45)}
 else if(sp>320)show(4,d.face<0);else if(sp>45)show(2,d.face<0);else if(Math.abs(d.om)>1.1)show(d.th<0?1:5,false);else show(Math.floor(now/2600)%3==2?6:0,false);
 requestAnimationFrame(step)};requestAnimationFrame(step)}
-function drop(){const d=dg;dg=null;const w=d.w;
+function drop(){const d=dg;dg=null;const w=d.w;d.sb.classList.remove('on');setTimeout(()=>d.sb.remove(),300);
 /* let go: she swings level, plops down a little and sparkles off to her next adventure */
 w.animate([{transform:w.style.transform},{transform:`translate3d(${d.px-d.PX}px,${d.py-d.PY+28}px,0) rotate(0rad)`}],{duration:380,easing:'cubic-bezier(.5,0,.8,.6)',fill:'forwards'}).finished.then(async()=>{d.show(1,false);await wait(450);burstAt(w)},()=>w.remove())}})();window.ainaMoves=MOVES;let lastM=-1;const busy=()=>document.hidden||document.querySelector('#ainaw,#aina2,.ainam,.ainap,.ainad');
 (async()=>{try{await introP}catch(e){}for(;;){while(busy())await wait(100);let i=Math.floor(Math.random()*MOVES.length);if(MOVES.length>1&&i===lastM)i=(i+1)%MOVES.length;lastM=i;try{await MOVES[i]()}catch(e){await wait(1000)}}})();})();
