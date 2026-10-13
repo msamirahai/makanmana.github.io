@@ -953,11 +953,11 @@ if(y-H/2>vh){run.alive=false;w.remove()}}
 if(!run.alive)return;
 /* 2. she grabs the ledge with both hands and swings, kicks, then hauls herself up; from here she belongs to the page, so she scrolls with it */
 const Ly=hit.el.getBoundingClientRect().top+scrollY;x=Math.max(hit.l,Math.min(hit.r,x));w.style.position='absolute';
-st.use(LGR,300,330);w.style.transformOrigin='50% 3%';const a0=Math.max(-28,Math.min(28,vx*.05+(Math.random()-.5)*16));let ts=T();
+st.use(LGR,300,330);w.style.transformOrigin='50% 22%';const HY=[50,76,73,64,83,72,72,62,72,72,78],grip=f=>Ly-HY[f]*DS+2;const a0=Math.max(-28,Math.min(28,vx*.05+(Math.random()-.5)*16));let ts=T();
 const place=(top,r)=>{w.style.transform=`translate3d(${x-W/2}px,${top}px,0) rotate(${r||0}deg)`};
-while(run.alive&&T()-ts<1500){await tick();const t=(T()-ts)/1000;st.show([0,1,2,3][Math.floor(t/.16)%4]);place(Ly-6*DS,a0*Math.exp(-t*2.6)*Math.cos(t*8))}
-for(const f of [4,5,6,5,4]){if(!run.alive)return;st.show(f);place(Ly-6*DS);await wait(190)}
-const rise=H*.62;ts=T();while(run.alive&&T()-ts<1300){await tick();const u=Math.min(1,(T()-ts)/1300),e=u<.5?2*u*u:1-2*(1-u)*(1-u);st.show(7+Math.min(3,Math.floor(u*4)));place(Ly-6*DS-rise*e)}
+while(run.alive&&T()-ts<1500){await tick();const t=(T()-ts)/1000;const f=[0,1,2,3][Math.floor(t/.16)%4];st.show(f);place(grip(f),a0*Math.exp(-t*2.6)*Math.cos(t*8))}
+for(const f of [4,5,6,5,4]){if(!run.alive)return;st.show(f);place(grip(f));await wait(190)}
+const rise=96*DS;ts=T();while(run.alive&&T()-ts<1300){await tick();const u=Math.min(1,(T()-ts)/1300),e=u<.5?2*u*u:1-2*(1-u)*(1-u),f=7+Math.min(3,Math.floor(u*4));st.show(f);place(grip(f)-rise*e)}
 if(!run.alive)return;
 /* 3. up on the ledge: phew, a wipe of the brow */
 const stand=(fr,cw,ch,foot)=>{st.use(fr,cw,ch);W=cw*DS;H=ch*DS;w.style.transformOrigin='50% 100%';place(Ly-foot*DS)};
