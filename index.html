@@ -109,7 +109,7 @@ small{color:var(--mut)}
 background-image:linear-gradient(90deg,transparent 49.6%,rgba(74,58,120,.08) 50%,transparent 50.4%),linear-gradient(transparent 49.4%,rgba(74,58,120,.07) 50%,transparent 50.6%);transform-origin:50% 50%;animation:unfold .65s cubic-bezier(.2,.8,.3,1.1)}
 .ifn{margin:-2px 0 8px;font-weight:600}
 #wb:disabled{background:color-mix(in srgb,var(--mut) 22%,var(--card));color:var(--mut);box-shadow:none;opacity:1;cursor:not-allowed}#wb:disabled::after{display:none}
-.row.reg{flex-wrap:wrap;align-items:flex-start}.row.reg .sn{flex-basis:100%}.dd{display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%}.dd select{min-height:36px;padding:5px 9px;font-size:13px;border-radius:11px}.dd select[aria-label^=Our]{grid-column:1/-1}.ms{grid-column:1/-1}.dd .rname{font-weight:700}.dd .rnote{grid-column:1/-1;min-height:36px;padding:6px 10px;font-size:13px;border-radius:11px}.rn{display:block;width:100%;margin-top:2px;color:var(--mut)}.ms summary{list-style:none;cursor:pointer;min-height:36px;padding:7px 30px 7px 10px;font-size:13px;border:2px solid var(--line);border-radius:11px;background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 16'%3E%3Cpath d='M2 6l4-4 4 4M2 10l4 4 4-4' fill='none' stroke='%23a07a96' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 11px center/10px 14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ms summary::-webkit-details-marker{display:none}.ms>div{padding:6px 0 2px}.ms .chip{padding:5px 11px;font-size:13px}.dd .sv{grid-column:1/-1;justify-content:center}.dd.one:has(.ev){grid-template-columns:1fr auto}
+.row.reg{flex-wrap:wrap;align-items:flex-start}.row.reg .sn{flex-basis:100%}.dd{display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%}.dd select{min-height:36px;padding:5px 9px;font-size:13px;border-radius:11px}.dd select[aria-label^=Our]{grid-column:1/-1}.ms{grid-column:1/-1}.dd .rname{font-weight:700}.dd .rnote{grid-column:1/-1;min-height:36px;padding:6px 10px;font-size:13px;border-radius:11px}.rn{display:block;width:100%;margin-top:2px;color:var(--mut)}.ms summary{list-style:none;cursor:pointer;min-height:36px;padding:7px 30px 7px 10px;font-size:13px;border:2px solid var(--line);border-radius:11px;background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 16'%3E%3Cpath d='M2 6l4-4 4 4M2 10l4 4 4-4' fill='none' stroke='%23a07a96' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 11px center/10px 14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ms summary::-webkit-details-marker{display:none}.ms>div{padding:6px 0 2px}.ms .chip{padding:5px 11px;font-size:13px}.dd .sv{grid-column:1/-1;justify-content:center}.dd .dl{grid-column:1/-1;justify-content:center;background:transparent;color:#c0466f;border:1.5px solid #e7a3bd;box-shadow:none}.dd.one:has(.ev){grid-template-columns:1fr auto}
 .hint.tight{margin:10px 0 0}.hint.tight+.hint.tight{margin-top:2px}
 .need{text-align:center;font-size:13px;line-height:1.55;font-weight:600;color:var(--pk);margin:8px 0 0}.need:empty{display:none}
 .chip.done{border-style:dashed}
@@ -264,8 +264,8 @@ function skipMig(){MIG=true;try{localStorage.setItem('fh_mig','1')}catch(e){}ren
 function modeBar(){const m=MODE=='live'?(RO?'<span class="dot o"></span>Group log · view only':'<span class="dot"></span>'+(CREW?'Synced (Live)':'Shared group log · live for all 8 of you')):MODE=='local'?'<span class="dot o"></span>'+(fbOn()?'Not synced · saved on this phone':'Saved on this phone'):MODE=='error'?'<span class="dot o"></span>Group log offline · reconnecting':'<span class="load"></span>Connecting to the group log…';
 const m2=/^<span class="dot/.test(m)?m+m.slice(0,m.indexOf('</span>')+7):m;
 return `<div class="mode">${m2}</div>${MODE=='live'&&!RO&&!MIG&&hasLocal()?`<div class="card">${H2('Bring your old entries along?')}<p class="hint">This phone has ${LOCAL.logs.length} meal(s), ${LOCAL.rota.length} rota entr${LOCAL.rota.length==1?'y':'ies'} and ${LOCAL.cust.length} spot(s) saved from before the group log. Copy them in so everyone can see them?</p><button class="btn" id="mgb" onclick="migrate()">Copy them to the group log</button><button class="btn s" style="margin-top:10px" onclick="skipMig()">No thanks</button></div>`:''}`}
-const SIDS=new Set(SEED.map(x=>x.id));let ALLc=null,ALLk=null;
-const all=()=>{if(ALLk===S.cust)return ALLc;const o={};S.cust.forEach(c=>{if(SIDS.has(c.id))o[c.id]=c});ALLk=S.cust;return ALLc=[...SEED.map(x=>o[x.id]?Object.assign({},x,o[x.id]):x),...S.cust.filter(c=>!SIDS.has(c.id))]};
+const SIDS=new Set(SEED.map(x=>x.id));let ALLf=[],ALLc=null,ALLk=null;
+const all=()=>{if(ALLk===S.cust)return ALLc;const o={};S.cust.forEach(c=>{if(SIDS.has(c.id))o[c.id]=c});ALLk=S.cust;ALLf=[...SEED.map(x=>o[x.id]?Object.assign({},x,o[x.id]):x),...S.cust.filter(c=>!SIDS.has(c.id))];return ALLc=ALLf.filter(r=>!r.gone)};
 function editSpot(id,patch){const base=S.cust.find(c=>c.id==id)||SEED.find(x=>x.id==id);if(base)addItem('cust',Object.assign({},base,patch))}
 const beenOf=r=>r.been!=null?!!r.been:S.logs.some(l=>l.r==r.id);
 const hasT=(r,k)=>!!(r.t&&r.t.includes(k));
@@ -280,7 +280,7 @@ const hb=r=>`<button class="hb ${isH(r)?'on':''}" onclick="event.stopPropagation
 const rateB=r=>{const a=avgR(r.id);return a===null?'':`<span class="tag rt">${a.toFixed(1)}/10</span>`};
 const tagsH=r=>rateB(r)+(isG(r)?'<span class="tag p">Gem</span>':'')+(r.nw?'<span class="tag l">New</span>':'')+(r.t||[]).map(k=>TL[k]?`<span class="tag ${TL[k][1]}">${TL[k][0]}</span>`:'').join('');
 const byId=id=>all().find(r=>r.id==id);
-const rn=id=>(byId(id)||{n:'?'}).n;
+const rn=id=>(byId(id)||(all(),ALLf.find(r=>r.id==id))||{n:'?'}).n;
 const isG=r=>r.id in S.gem?S.gem[r.id]:!!r.g;
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const td=()=>new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);
@@ -618,7 +618,7 @@ ${box('C','Cuisine?',(aft?AFT:CU).map(c=>[c,c]),C,'togCu')}
 ${been}${rate||'<span></span>'}
 ${box('B','Labels?',LABELS,LB,'togLab')}
 <input type="text" aria-label="Note" class="rnote" placeholder="Note: what to order, opening hours…" value="${esc(r.note||'')}" onchange="editSpot('${r.id}',{note:this.value.trim()})">
-<button class="btn s pk sv" onclick="saveSpot('${r.id}')">Save</button></div>`
+<button class="btn s pk sv" onclick="saveSpot('${r.id}')">Save</button><button class="btn s dl" onclick="delSpot('${r.id}')">Delete</button></div>`
 :`<div class="ri">${info}</div><div class="dd one">${ed()?'':been}${rate}${ed()?`<button class="btn s ev" onclick="V.edit='${r.id}';render()">Edit</button>`:''}</div>`}</div>`}
 const LABN=Object.fromEntries(LABELS);
 const labsOf=r=>[isH(r)&&'heart',isG(r)&&'g',r.nw&&'nw',...(r.v||[]).map(t=>'v:'+t)].filter(Boolean);
@@ -661,7 +661,7 @@ function setMe(p){ME=p;try{localStorage.setItem('fh_me',p)}catch(e){}if(V.sheet)
 async function rateIt(id,v){if(!ME){toast('Pick who you are first.');return}const o={id:id+'__'+ME.replace(/\s+/g,'_'),s:id,p:ME,v};const cur=S.rate.find(x=>x.id==o.id);
 if(cur&&+cur.v==v)await delItem('rate',o.id);else{await addItem('rate',o);if(v>=9)burst()}openSpot(id)}
 function closeSpot(){V.sheet=null;const m=$('sheet');if(m)m.remove()}
-async function delSpot(id){const r=byId(id);if(!r||!confirm('Remove '+r.n+' from the list for everyone?'))return;closeSpot();await delItem('cust',id);toast(r.n+' removed')}
+async function delSpot(id){const r=byId(id);if(!r||!confirm('Delete '+r.n+' from the registry for everyone?'))return;closeSpot();V.edit=null;if(SIDS.has(id))editSpot(id,{gone:true});else await delItem('cust',id);toast(r.n+' deleted');render()}
 function openSpot(id){const r=byId(id);if(!r)return;V.sheet=id;let m=$('sheet');if(!m){m=document.createElement('div');m.id='sheet';m.className='sheetbg';m.onclick=e=>{if(e.target==m)closeSpot()};document.body.appendChild(m)}
 const mine=ME?S.rate.find(x=>x.s==id&&x.p==ME):null,rs=ratesOf(id),a=avgR(id),cnt=S.logs.filter(l=>l.r==id).length;
 m.innerHTML=`<div class="sheet" role="dialog" aria-label="${esc(r.n)}"><button class="x" onclick="closeSpot()" aria-label="Close">×</button>
