@@ -1221,8 +1221,8 @@ async function farThrow(x,y,vx,vy){const st=stage(),w=st.w,run={alive:true},fr=w
  const place=(px,py,rot,flip)=>{fr.style.transform=flip?'scaleX(-1)':'';w.style.transform=`translate3d(${px-W/2}px,${py-H/2}px,0) rotate(${rot||0}deg)`};
  /* 1. off she sails into the distance, getting smaller and smaller */
  const sp=Math.hypot(vx,vy)||1,ux=vx/sp,uy=vy/sp,away=vx<0,fx=Math.max(vw*.2,Math.min(vw*.8,x+ux*Math.min(vw*.45,240))),fy=Math.max(vh*.24,Math.min(vh*.42,y+uy*150-130));
- say('wheeee',1600);let t0=T();
- while(run.alive){const t=T()-t0,u=Math.min(1,t/1500),e=1-Math.pow(1-u,2.4),f=Math.min(5,Math.floor(u*6)),px=x+(fx-x)*e,py=y+(fy-y)*e-Math.sin(Math.PI*u)*45;
+ say('wheeee',2300);let t0=T();
+ while(run.alive){const t=T()-t0,u=Math.min(1,t/2200),e=1-Math.pow(1-u,2.4),f=Math.min(5,Math.floor(u*6)),px=x+(fx-x)*e,py=y+(fy-y)*e-Math.sin(Math.PI*u)*45;
   st.show(f);place(px,py,Math.sin(t/90)*8*(1-u),away);bub(px,py-[95,62,45,34,27,22][f]*DS);if(u>=1)break;await tick()}
  if(!run.alive)return;
  /* 2. a tiny landing far, far away */
@@ -1230,7 +1230,7 @@ async function farThrow(x,y,vx,vy){const st=stage(),w=st.w,run={alive:true},fr=w
  t0=T();while(run.alive&&T()-t0<700){bub(fx,fy-30*DS);await tick()}if(!run.alive)return;
  /* 3. and she runs all the way back to the front, getting bigger with every step */
  const nb=document.querySelector('nav'),floor=(nb?nb.getBoundingClientRect().top:vh)-12,tx=fx<vw/2?Math.min(vw-W*.6,vw*.62):Math.max(W*.6,vw*.38),ty=Math.max(fy+40,floor-105*DS),back=tx<fx;
- t0=T();while(run.alive){const t=T()-t0,u=Math.min(1,t/2100),e=u<.5?2*u*u:1-2*(1-u)*(1-u),f=7+Math.min(6,Math.floor(u*7)),px=fx+(tx-fx)*e,py=fy+(ty-fy)*e-Math.abs(Math.sin(t*Math.PI/280))*(3+u*8);
+ t0=T();while(run.alive){const t=T()-t0,u=Math.min(1,t/3000),e=u<.5?2*u*u:1-2*(1-u)*(1-u),f=7+Math.min(6,Math.floor(u*7)),px=fx+(tx-fx)*e,py=fy+(ty-fy)*e-Math.abs(Math.sin(t*Math.PI/300))*(3+u*8);
   st.show(f);place(px,py,0,back);bub(px,py-[22,26,30,40,52,70,98][f-7]*DS);if(u>=1)break;await tick()}
  if(!run.alive)return;
  /* 4. "I'm baaackkk!" */
