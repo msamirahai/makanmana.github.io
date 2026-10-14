@@ -1086,7 +1086,7 @@ window.ainaPsst=async({e,r})=>{const cx=r.left+r.width/2,by=r.bottom;try{e.__end
  for(let f=0;f<3;f++){if(!run.alive)return;st.show(f);if(f==2){const hx=X+(side<0?300-188:188)*DS,hy=Y+255*DS;sendLetter(hx,hy,side)}await wait(f==2?650:280)}
  if(!run.alive)return;fr.style.transform='';st.use(PSS,300,330);st.show(3);await wait(1000);if(!run.alive)return;
  /* and off she dances */
- st.use(A.d,220,247);W=220*DS;H=247*DS;const dir=-side,V=Math.max(70,vw*.2),Yd=Y+330*DS-247*DS-2;let x=X+(300-220)*DS/2,last=-1;const d0=performance.now();let prev=d0;
+ w.classList.remove('eating','loving','psst');st.use(A.d,220,247);W=220*DS;H=247*DS;const dir=-side,V=Math.max(70,vw*.2),Yd=Y+330*DS-247*DS-2;let x=X+(300-220)*DS/2,last=-1;const d0=performance.now();let prev=d0;
  while(run.alive){const now=await tick(),dt=Math.min(.05,(now-prev)/1000);prev=now;x+=dir*V*dt;const t=(now-d0)/1000,f=Math.floor(t/.3)%A.d.length;if(f!==last){last=f;st.show(f)}
   w.style.transform=`translate3d(${x}px,${Yd-Math.abs(Math.sin(t*Math.PI/.6))*4}px,0)`;if(x>vw+10||x<-W-10||document.hidden){run.alive=false;w.remove()}}};
 /* the envelope sails to the middle of the screen, lands, opens, and a little note comes out */
@@ -1123,7 +1123,7 @@ window.ainaFeed=async({e,r},fi,done)=>{let fed=false;const finish=()=>{if(!fed){
  const T=[700,520,520,600,520,520,600,700,650,650,1100,1400];
  for(let i=0;i<12;i++){if(!run.alive)return finish();st.show(i);if(i==0)st.talk('yay!',1100,.4);await wait(T[i])}finish();
  /* all gone: up she gets and dances away */
- if(!run.alive)return;st.use(A.d,220,247);W=220*DS;H=247*DS;const dir=X+W/2<vw/2?-1:1,V=Math.max(70,vw*.2),Yd=Y+330*DS-247*DS-2;let x=X+(300-220)*DS/2,last=-1;const t0=performance.now();let prev=t0;
+ if(!run.alive)return;w.classList.remove('eating','loving','psst');st.use(A.d,220,247);W=220*DS;H=247*DS;const dir=X+W/2<vw/2?-1:1,V=Math.max(70,vw*.2),Yd=Y+330*DS-247*DS-2;let x=X+(300-220)*DS/2,last=-1;const t0=performance.now();let prev=t0;
  while(run.alive){const now=await tick(),dt=Math.min(.05,(now-prev)/1000);prev=now;x+=dir*V*dt;const t=(now-t0)/1000,f=Math.floor(t/.3)%A.d.length;if(f!==last){last=f;st.show(f)}
   w.style.transform=`translate3d(${x}px,${Yd-Math.abs(Math.sin(t*Math.PI/.6))*4}px,0)`;if(x>vw+10||x<-W-10||document.hidden){run.alive=false;w.remove()}}};
 /* hold her even longer and she puffs up bigger and bigger with love (last frame: she bursts into hearts) */
@@ -1155,7 +1155,7 @@ window.ainaLove=async({e,r},h={})=>{const cx=r.left+r.width/2,by=r.bottom;try{e.
  h.party=null;
  await wait(3000);bob.cancel();if(!run.alive||h.growing)return;
  /* then off she dances */
- st.use(A.d,220,247);W=220*DS;H=247*DS;const dir=X+W/2<vw/2?-1:1,V=Math.max(70,vw*.2),Yd=Y+330*DS-247*DS-2;let x=X+(300-220)*DS/2,last=-1;const d0=performance.now();let prev=d0;
+ w.classList.remove('eating','loving','psst');st.use(A.d,220,247);W=220*DS;H=247*DS;const dir=X+W/2<vw/2?-1:1,V=Math.max(70,vw*.2),Yd=Y+330*DS-247*DS-2;let x=X+(300-220)*DS/2,last=-1;const d0=performance.now();let prev=d0;
  while(run.alive){const now=await tick(),dt=Math.min(.05,(now-prev)/1000);prev=now;x+=dir*V*dt;const t=(now-d0)/1000,f=Math.floor(t/.3)%A.d.length;if(f!==last){last=f;st.show(f)}
   w.style.transform=`translate3d(${x}px,${Yd-Math.abs(Math.sin(t*Math.PI/.6))*4}px,0)`;if(x>vw+10||x<-W-10||document.hidden){run.alive=false;w.remove()}}};
 /* the love explosion: pink hearts rain down over the whole screen and a crowd of little Ainas pop up in their love poses, then sparkle away (about 5 seconds) */
