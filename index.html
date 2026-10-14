@@ -210,9 +210,9 @@ background-image:linear-gradient(90deg,transparent 49.6%,rgba(74,58,120,.08) 50%
 .note{font-size:12.5px;color:var(--mut);background:var(--bg);border-radius:12px;padding:8px 10px;margin-top:10px}
 .load{display:inline-block;width:16px;height:16px;border:3px solid var(--pink);border-top-color:var(--pk);border-radius:50%;animation:sp .8s linear infinite;vertical-align:-3px;margin-right:6px}
 @keyframes sp{to{transform:rotate(360deg)}}
-nav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom,0px));width:min(620px,calc(100% - 20px));z-index:50;background:color-mix(in srgb,var(--card) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:0;border-radius:26px;display:grid;grid-template-columns:repeat(7,1fr);padding:5px 4px;box-shadow:0 10px 30px var(--glow2)}
+nav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom,0px));width:min(620px,calc(100% - 20px));z-index:50;background:color-mix(in srgb,var(--card) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:0;border-radius:26px;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));column-gap:3px;align-items:stretch;padding:6px 10px;box-shadow:0 10px 30px var(--glow2)}
 .fslot{display:flex;align-items:center;justify-content:center;touch-action:none;cursor:grab;-webkit-tap-highlight-color:transparent;min-width:0}
-.fslot img{width:40px;height:40px;object-fit:contain;filter:drop-shadow(0 3px 4px rgba(90,60,110,.28));pointer-events:none;-webkit-user-drag:none;user-select:none}
+.fslot img{width:34px;height:34px;object-fit:contain;filter:drop-shadow(0 3px 4px rgba(90,60,110,.28));pointer-events:none;-webkit-user-drag:none;user-select:none}
 .fslot.empty img{opacity:0;transform:scale(.3)}
 .fslot img.magic{animation:fmagic .7s cubic-bezier(.3,1.7,.5,1)}
 @keyframes fmagic{0%{transform:scale(0) rotate(-30deg);opacity:0;filter:brightness(2.2) drop-shadow(0 0 10px #fff)}60%{transform:scale(1.25) rotate(8deg);opacity:1;filter:brightness(1.4) drop-shadow(0 0 8px #ffe7a3)}100%{transform:none;opacity:1}}
@@ -221,7 +221,7 @@ nav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(10px + env(sa
 .ffood{position:fixed;left:0;top:0;width:64px;height:64px;z-index:402;pointer-events:none;will-change:transform}
 .ffood.fplaced{z-index:40;pointer-events:auto;cursor:grab;touch-action:none}
 .ffood img{width:100%;height:100%;object-fit:contain;display:block;filter:drop-shadow(0 5px 6px rgba(90,60,110,.3));pointer-events:none;-webkit-user-drag:none;user-select:none}
-nav button{background:none;border:0;font-size:10.5px;font-weight:700;text-align:center;padding:5px 6px;border-radius:16px;color:var(--mut);min-width:0;cursor:pointer;line-height:1.15;transition:background .2s}
+nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;background:none;border:0;font-size:10.5px;font-weight:700;text-align:center;padding:5px 2px;white-space:nowrap;border-radius:16px;color:var(--mut);min-width:0;cursor:pointer;line-height:1.15;transition:background .2s}
 nav button.on{background:linear-gradient(135deg,var(--pink),var(--lav));color:var(--ink)}
 nav span{display:flex;justify-content:center;margin-bottom:1px}
 .cf{position:fixed;top:-14px;width:9px;height:9px;z-index:300;pointer-events:none;animation:fall 1.9s linear forwards}
