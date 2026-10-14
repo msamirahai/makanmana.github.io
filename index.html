@@ -384,7 +384,12 @@ return {move(a,b){px=a;py=b},drop(){alive=false;
  if(hit){w.animate([{transform:w.style.transform,opacity:1},{transform:`translate3d(${px-S/2}px,${py-S/2}px,0) scale(.4)`,opacity:0}],{duration:220,fill:'forwards'}).finished.then(()=>w.remove(),()=>w.remove());ainaFeed(hit,fi,()=>foodRefill());return}
  let y=py,x=px,v=Math.min(500,Math.max(-600,vy)),hx=Math.max(-500,Math.min(500,vx)),rot=tilt,prev=performance.now();
  const fall=now=>{const dt=Math.min(.04,(now-prev)/1000);prev=now;v+=1900*dt;y+=v*dt;x+=hx*dt;rot+=hx*.4*dt;
-  w.style.transform=`translate3d(${x-S/2}px,${y-S/2}px,0) rotate(${rot}deg)`;if(y-S>innerHeight||x<-S||x>innerWidth+S){w.remove();foodRefill();return}requestAnimationFrame(fall)};requestAnimationFrame(fall)}}}
+  w.style.transform=`translate3d(${x-S/2}px,${y-S/2}px,0) rotate(${rot}deg)`;
+  /* on the way down it can land on Aina: if she's right under it, she catches it and eats */
+  const lead=y+S*.3,hit=v>0&&window.ainaAt&&ainaAt(x,lead);
+  if(hit){const r=hit.r,cx=r.left+r.width/2;if(Math.abs(x-cx)<r.width*.38&&lead>r.top+r.height*.12&&y<r.bottom-r.height*.15){
+   w.animate([{transform:w.style.transform,opacity:1},{transform:`translate3d(${x-S/2}px,${y-S/2+8}px,0) scale(.4)`,opacity:0}],{duration:220,fill:'forwards'}).finished.then(()=>w.remove(),()=>w.remove());ainaFeed(hit,fi,()=>foodRefill());return}}
+  if(y-S>innerHeight||x<-S||x>innerWidth+S){w.remove();foodRefill();return}requestAnimationFrame(fall)};requestAnimationFrame(fall)}}}
 const go=t=>{if(t!==V.tab&&window.ainaClear)ainaClear();V.tab=t;render();scrollTo({top:0,behavior:'smooth'})};
 function render(){
 $('nav').innerHTML=TABS.map(t=>`<button class="${V.tab==t[0]?'on':''}" onclick="go('${t[0]}')" aria-label="${t[2]}"><span>${t[1]}</span>${t[2]}</button>`).join('')+`<div class="fslot ${FOOD.empty?'empty':''}" aria-label="A snack to pick up"><img alt="" draggable="false" src="${FOODS[FOOD.i]}"></div>`;
